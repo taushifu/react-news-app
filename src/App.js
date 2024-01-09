@@ -16,15 +16,18 @@ const App = () => {
   const [progress, setProgress] = useState(0);
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <Router>
         <div>
-          <LoadingBar
-            color='#f11946'
-            progress={progress}
-          />
+          <Navbar />
+          <div>
+            <LoadingBar
+              color='#f11946'
+              progress={progress}
+              style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+            />
+          </div>
         </div>
-        <Navbar />
         <Routes>
           <Route exact path="/" element={<News apiKey={apiKey} setProgress={setProgress} key="general" pageSize={pageSize} category="general" />}></Route>
 

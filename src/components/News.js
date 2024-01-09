@@ -20,14 +20,18 @@ const News = (props) => {
 
         let url = `https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
 
-        await fetch(url)
-            .then(async result => {
-                const data = await result.json();
-                setArticles(articles.concat(data.articles));
-                setTotalResults(data.totalResults);
-                setPage(page + 1);
-                setLoading(false);
-            })
+        try {
+            await fetch(url)
+                .then(async result => {
+                    const data = await result.json();
+                    setArticles(articles.concat(data.articles));
+                    setTotalResults(data.totalResults);
+                    setPage(page + 1);
+                    setLoading(false);
+                })
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+        }
     }
 
     useEffect(() => {
@@ -35,16 +39,21 @@ const News = (props) => {
         props.setProgress(15);
         let url = `https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
 
-        fetch(url).then(async (result) => {
-            props.setProgress(30);
-            const data = await result.json();
-            props.setProgress(70);
-            setArticles(data.articles);
-            setTotalResults(data.totalResults);
-            setPage(page + 1);
-            setLoading(false);
-            props.setProgress(100);
-        })
+        try {
+            fetch(url).then(async (result) => {
+                props.setProgress(30);
+                const data = await result.json();
+                props.setProgress(70);
+                setArticles(data.articles);
+                setTotalResults(data.totalResults);
+                setPage(page + 1);
+                setLoading(false);
+                props.setProgress(100);
+            });
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+        }
+        // eslint-disable-next-line
     }, [])
 
     return (
